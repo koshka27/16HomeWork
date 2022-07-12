@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import json
 from data import users, orders, offers
-from flask import requests
+import requests
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///:memory:'
@@ -189,19 +189,13 @@ def get_offers():
     if request.method == "GET":
         result = []
         for u in Offer.query.all():
-            result.append(u.to_dict())
+            res = {
+                "id": u.id,
+                "order_id": u.order_id,
+                "executor_id": u.executor_id,
+            }
+            result.append(res)
         return json.dumps(result), 200, {'Content-Type': 'application/json; charset=utf-8'}
-    elif request.method == "POST":
-        offer_data = json.loads(request.data)
-        new_offer = Offer(
-            id=offer_data["id"],
-            order_id=offer_data["order_id"],
-            executor_id=offer_data["executor_id"]
-
-        )
-        db.session.add(new_order)
-        db.session.commit()
-        return "", 201
 
 
 @app.route("/offers/<int:oid>", methods=['GET', 'PUT', 'DELETE'])
