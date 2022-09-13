@@ -90,7 +90,7 @@ for offer_data in offers:
 def get_users_all():
     if request.method == "GET":
         result = []
-        for u in Order.query.all():
+        for u in User.query.all():
             result.append(u.to_dict())
         return json.dumps(result), 200, {'Content-Type': 'application/json; charset=utf-8'}
     elif request.method == "POST":
